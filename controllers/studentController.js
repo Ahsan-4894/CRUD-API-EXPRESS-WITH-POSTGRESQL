@@ -66,6 +66,42 @@ class CRUD{
             res.status(400).send({"Status":"Error" ,"Message":"All fields are required!"});
         }
     }
+    static getAllStudents = async(req, res)=>{
+        const client = await pool.connect();
+        try {
+            const result = await client.query("SELECT * FROM students");
+            if(result.rowCount!==0){
+                res.status(200).send({"Status":"Success" ,"Message":result.rows});
+            }else{
+                res.status(400).send({"Status":"Error" ,"Message":"Empty database!"});           
+            }
+        } catch (error) {
+            res.status(500).send({"Status":"Error" ,"Message":"An error occurred!"});
+        }finally{
+            client.release();
+        }
+    }
+    static deleteStudent = async(req, res)=>{
+        const client = await pool.connect();
+        const {id} = req.params;
+        if(id){
+            try {
+                const result = await client.query("SELECT * FROM students WHERE std_id=$1", [id]);
+                if(result.rowCount!==0){
+                    await client.query("DELETE FROM students WHERE std_id=$1", [id]);
+                    res.status(200).send({"Status":"Success" ,"Message":"Student has been deleted"});
+                }else{
+                    res.status(500).send({"Status":"Error" ,"Message":"No such students exists!"});                    
+                }
+            } catch (error) {
+                res.status(500).send({"Status":"Error" ,"Message":"An error occurred!"});
+            }finally{
+                client.release();
+            }
+        }else{
+            res.status(400).send({"Status":"Error" ,"Message":"All fields are required!"});
+        }
+    }
 };
 
 export default CRUD;

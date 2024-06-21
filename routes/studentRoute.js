@@ -9,5 +9,7 @@ route.use("/add-student", isValid);
 route.get("/get-student-by-id/:id", CRUD.getStudentById);
 route.post("/add-student", CRUD.insertStudent);
 route.post("/update-student/:id", CRUD.updateStudent);
+route.get("/get-all-students", CRUD.getAllStudents);
+route.post("/delete-student/:id", CRUD.deleteStudent);
 export default route;
 
