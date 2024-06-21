@@ -45,6 +45,27 @@ class CRUD{
             client.release();
         }
     }
+    static updateStudent = async (req, res)=>{
+        const {id} = req.params;
+        if(id){
+            const {std_id, firstName, lastName, Department, Section} = req.body;
+            if(std_id && firstName && lastName && Department && Section){
+                const client = await pool.connect();
+                try {
+                    await client.query('UPDATE students SET std_id=$1,firstname=$2,lastname=$3, department=$4, section=$5 WHERE std_id=$6',[std_id, firstName, lastName, Department, Section, id]);
+                    res.status(201).send({"Status":"Success" ,"Message":"Student has been updated!"});
+                } catch (error) {
+                    res.status(500).send({"Status":"Error" ,"Message":"An error occurred!"});
+                }finally{
+                    client.release();
+                }
+            }else{
+                res.status(400).send({"Status":"Error" ,"Message":"All fields are required!"});                
+            }
+        }else{
+            res.status(400).send({"Status":"Error" ,"Message":"All fields are required!"});
+        }
+    }
 };
 
 export default CRUD;

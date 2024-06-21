@@ -12,7 +12,7 @@ const isValid = (req, res, next)=>{
         }else if(!departmentPattern.test(Department)){
             res.status(400).send({"Status":"Error" ,"Message":"Invalid Department field format, 2-5 characters are allowed!"});
         }else if(!sectionPattern.test(Section)){  
-            res.status(400).send({"Status":"Error" ,"Message":"Invalid Section field format, Only 2 characters are allowed!"});
+            res.status(400).send({"Status":"Error" ,"Message":"Invalid Section field format, Only a character is allowed!"});
         }else{
             next();
         }
